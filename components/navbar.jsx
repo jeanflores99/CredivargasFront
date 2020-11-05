@@ -1,14 +1,15 @@
 import React, { Fragment, useState, useEffect, useContext } from 'react';
+import Router from 'next/router';
 import Show from './Show';
 import Link from 'next/link'
 import { Button } from 'semantic-ui-react'
 import { AppContext } from '../contexts/AppContext'
 
-const NavBar = () => {
+const NavBar = ({ isLogging, auth }) => {
+    // localStorage.setItem('UserActual','aeamano')
 
-
-    const { isLogging } = useContext(AppContext);
-    const [UserActual, setUserActual] = useState("");
+    // const { isLogging } = useContext(AppContext);
+    // const [UserActual, setUserActual] = useState("");
 
 
     return (
@@ -16,12 +17,20 @@ const NavBar = () => {
             <div className="az-header">
                 <div className="container">
                     <div className="az-header-left">
-                        <a href="index.html" className="az-logo"><span></span> <img src="img/logocv.png" /></a>
+                        <a onClick={
+                            (e) => {
+                                e.preventDefault()
+                                Router.push('/')
+                            }
+                        } className="az-logo"><span></span> <img src="img/logocv.png" /></a>
                         <a href="" id="azMenuShow" className="az-header-menu-icon d-lg-none"><span></span></a>
                     </div>
                     <div className="az-header-menu">
                         <div className="az-header-menu-header">
-                            <a href="index.html" className="az-logo"><span></span> <img src="img/logocv.png" /></a>
+                            <a onClick={() => {
+                                e.preventDefault()
+                                Router.push('/')
+                            }} className="az-logo"><span></span> <img src="img/logocv.png" /></a>
                             <a href="" className="close">&times;</a>
                         </div>
                         <ul className="nav">
@@ -109,9 +118,26 @@ const NavBar = () => {
  */}
                         {!isLogging ?
 
-                            <Link href="/" >
-                                <a>Registrate</a>
-                            </Link>
+                            <ul className="nav">
+                                <li className="nav-link">
+                                    <a onClick={
+                                        (e) => {
+                                            e.preventDefault()
+                                            Router.push('/registrate')
+                                        }
+                                    }><i className="fas fa-tv mr-2"></i>Registrate</a>
+                                </li>
+                                <li className="nav-link">
+                                    <a onClick={(e) => {
+                                        e.preventDefault()
+                                        Router.push('/login')
+                                    }}><i className="fas fa-tv mr-2 ml-2"></i>Incicie Sesión</a>
+                                </li>
+                            </ul>
+
+
+
+
 
                             : <div className="dropdown az-profile-menu">
                                 <a href="" className="az-img-user"><img src="../img/profile.jpg" alt="" /></a>
@@ -138,7 +164,7 @@ const NavBar = () => {
                     </div>
                 </div>
             </div>
-        </Fragment>
+        </Fragment >
     )
 }
 

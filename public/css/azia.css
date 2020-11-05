@@ -261,6 +261,7 @@ figure {
   margin: 0 0 1rem; }
 
 img {
+  cursor: pointer;
   vertical-align: middle;
   border-style: none; }
 
@@ -3073,6 +3074,7 @@ input[type="button"].btn-block {
 
 .nav-link {
   display: block;
+  cursor:pointer;
   padding: 0.5rem 1rem; }
   .nav-link:hover, .nav-link:focus {
     text-decoration: none; }
@@ -3097,6 +3099,7 @@ input[type="button"].btn-block {
       border-color: transparent; }
   .nav-tabs .nav-link.active,
   .nav-tabs .nav-item.show .nav-link {
+    cursor:pointer;
     color: #596882;
     background-color: #fff;
     border-color: #cdd4e0 #cdd4e0 #fff; }
