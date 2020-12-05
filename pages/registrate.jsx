@@ -4,7 +4,7 @@ import { url } from '../env'
 import Head from 'next/head';
 import Swal from 'sweetalert2';
 import SemanticDatepicker from 'react-semantic-ui-datepickers';
-import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
+// import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
 // import { Card, Icon, Image, Form, Button } from 'semantic-ui-react'
 // import 'images/icons/favicon.ico';
 // import 'font/css/font-awesome.min.css';
@@ -19,6 +19,7 @@ const axios = require('axios');
 
 const registrate = () => {
     const [data, setdata] = useState({
+        dni: '',
         last_name: '',
         first_name: '',
         email: '',
@@ -74,6 +75,7 @@ const registrate = () => {
                 if (!success) throw new Error(message)
                 await Swal.fire({ icon: 'success', text: message })
                 setdata({
+                    dni: '',
                     last_name: '',
                     first_name: '',
                     email: '',
@@ -105,7 +107,7 @@ const registrate = () => {
         const { API_UBIGEO } = url
         await axios.get(API_UBIGEO + 'provincia/' + id).then(response => {
             let data = JSON.parse(response.data.datos)
-            console.log(data)
+            // console.log(data)
             setpro(data)
         }).catch(err => {
             console.log(err)
@@ -115,7 +117,7 @@ const registrate = () => {
         const { API_UBIGEO } = url
         await axios.get(API_UBIGEO + 'distrito/' + cod_dep + '/' + cod_pro).then(response => {
             let data = JSON.parse(response.data.datos)
-            console.log(data)
+            // console.log(data)
             setdis(data)
         }).catch(err => {
             console.log(err)
@@ -125,9 +127,7 @@ const registrate = () => {
     const handleInput = ({ name, value }) => {
         setdata({ ...data, [name]: value })
     }
-    const handle = (obj) => {
-        console.log(obj)
-    }
+
     return (
 
         < Fragment >
@@ -152,7 +152,10 @@ const registrate = () => {
                             <h2 style={{ alignContent: 'center' }}>Formulario de Registro de Usuarios</h2>
                             <Card fluid className="mb-5">
                                 <Form className="mr-3 mt-3 ml-3 mb-3" >
-
+                                    <Form.Field>
+                                        <label>DNI <b className="text-danger">(*)</b></label>
+                                        <input placeholder='Ingrese su Documento de identidad' type="text" name="dni" value={data.dni || ""} onChange={(e) => handleInput(e.target)} />
+                                    </Form.Field>
                                     <Form.Field>
                                         <label>Nombres <b className="text-danger">(*)</b></label>
                                         <input placeholder='Ingrese sus Nombres' type="text" name="first_name" value={data.first_name || ""} onChange={(e) => handleInput(e.target)} />
@@ -165,13 +168,14 @@ const registrate = () => {
                                         <label>Email <b className="text-danger">(*)</b></label>
                                         <input placeholder='Ingrese su Email' type="email" name="email" value={data.email || ""} onChange={(e) => handleInput(e.target)} />
                                     </Form.Field>
-                                    <Form.Field>
-                                        <label>Nombre de Usuario<b className="text-danger">(*)</b></label>
-                                        <input placeholder='Ingrese un Nombre de Usuario Unico' type="text" value={data.username || ""} name="username" onChange={(e) => handleInput(e.target)} />
-                                    </Form.Field>
+
                                     <Form.Field>
                                         <label>Celular<b className="text-danger">(*)</b></label>
                                         <input placeholder='Ingrese su Telefono' type="number" name="telefono" value={data.telefono || ""} onChange={(e) => handleInput(e.target)} />
+                                    </Form.Field>
+                                    <Form.Field>
+                                        <label>Nombre de Usuario<b className="text-danger">(*)</b></label>
+                                        <input placeholder='Ingrese un Nombre de Usuario Unico' type="text" value={data.username || ""} name="username" onChange={(e) => handleInput(e.target)} />
                                     </Form.Field>
                                     <Form.Field>
                                         <label>Contraseña <b className="text-danger">(*)</b></label>
@@ -183,7 +187,10 @@ const registrate = () => {
                                     </Form.Field>
                                     <Form.Field>
                                         <lable>Ingrese su fecha de Nacimiento</lable>
-                                        <SemanticDatepicker className="ml-2" locale="es-ES" format="DD/MM/YYYY" value={data.fechanacimiento || ""} name="fechanacimiento" icon="calendar outline" onChange={(e, obj) => handleInput(obj)} />
+
+                                        <SemanticDatepicker className="ml-2 " datePickerOnly  locale="es-ES" format="DD/MM/YYYY" value={data.fechanacimiento || ""} name="fechanacimiento" icon="calendar outline" onChange={(e, obj) => handleInput(obj)} />
+
+
                                     </Form.Field>
                                     <Form.Field>
                                         <label>Seleccione su Departamento<b className="text-danger">(*)</b></label>

@@ -1,34 +1,36 @@
 import React, { Fragment, Component, useState, useEffect } from 'react';
 import { Input, Form, Button, Icon, Dimmer, Loader } from 'semantic-ui-react'
-import ContentLoader, { Facebook } from 'react-content-loader'
+// import ContentLoader, { Facebook } from 'react-content-loader'
 import { url } from '../env'
 import Swal from 'sweetalert2';
-
-// import Show from '../components/show'
-
-// import 'images/icons/favicon.ico';
-// import 'font/css/font-awesome.min.css';
-// import 'animate/animate.css';
-// import 'css-hamburgers/hamburgers.min.css'
-// import 'select2/select2.min.css';
-// import 'css/util.css';
-// import 'main.css';
 import Head from 'next/head'
-const MyLoader = () => <ContentLoader />
-const MyFacebookLoader = () => <Facebook />
+import Router from 'next/router';
+// import Axios from 'axios';
+// const MyLoader = () => <ContentLoader />
+// const MyFacebookLoader = () => <Facebook />
 const axios = require('axios');
-function login({ isLogging }) {
+
+function login({ setauth, auth, isLogging, setIsLogging }) {
 
     const [actived, setActive] = useState(true);
-    const [Login, setLogin] = useState({});
-    const [errors, seterrors] = useState({});
+    const [Login, setLogin] = useState({
+        username: '',
+        password: ''
+    });
+    const [errors, seterrors] = useState({
 
+    });
+    let { API_LOGIN } = url;
 
     useEffect(() => {
         setTimeout(() => {
             setActive(false)
         }, 500)
-    }, []);
+
+
+    }, [auth]);
+
+    // console.log(isLogging)
 
     const handleInputLogin = ({ name, value }) => {
 
@@ -36,31 +38,40 @@ function login({ isLogging }) {
     }
 
     const InitSesion = async () => {
+        let { push } = Router;
         let { API_LOGIN } = url
         let datos = Object.assign({}, Login)//clonamos el useSate Login
 
         await axios.post(API_LOGIN + 'login', datos)
             .then(async (res) => {
-                // console.log(res)
+
                 let { success, message } = res.data
 
                 if (!success) throw new Error(JSON.stringify(message))
                 localStorage.setItem('UserActual', message.token)
+                // setIsLogging(true)
+                setauth(res.data.user)
                 document.cookie = message.token;
                 await Swal.fire({ icon: 'success', text: 'Sesión Exitosa' })
-                setLogin({})
-                isLogging = true;
-                console.log(isLogging)
+                await setIsLogging(true)
+                await setLogin({
+                    username: '',
+                    password: ''
+                })
+                await seterrors({})
+                push({ pathname: '/show' })
+                // isLogging = true;
+                // console.log(isLogging)
 
             }
             ).catch(
                 async err => {
                     try {
-                        console.log(JSON.parse(err.message))
+                        console.log(JSON.stringify(err.message))
                         let response = JSON.parse(err.message)
                         await Swal.fire({ icon: 'warning', text: JSON.stringify(response.username || response.password || response.message) })
                         await seterrors(response)
-                        console.log(JSON.parse(repsonse))
+                        // console.log(JSON.parse(repsonse))
                     } catch (error) {
                         console.log(error)
                     }
@@ -100,7 +111,7 @@ function login({ isLogging }) {
                                  </span>
                                 <Form.Field>
                                     <label className="ml-2">Nombre de Usuario o Email</label>
-                                    <Input icon="user" className="ml-2" onChange={(e) => handleInputLogin(e.target)} iconPosition="left" placeholder="Ingrese su usuario o Email" fluid type="text" name="username" />
+                                    <Input icon="user" className="ml-2" onChange={(e) => handleInputLogin(e.target)} value={Login.username || ""} iconPosition="left" placeholder="Ingrese su usuario o Email" fluid type="text" name="username" />
                                     {errors && errors.username ?
                                         < label className="ml-2" style={{ color: "#c91d12" }}>{errors.username}</label>
                                         : null
@@ -108,7 +119,7 @@ function login({ isLogging }) {
                                 </Form.Field>
                                 <Form.Field>
                                     <label className="ml-2">Contraseña</label>
-                                    <Input icon="eye slash outline" className="ml-2" onChange={(e) => handleInputLogin(e.target)} iconPosition="left" placeholder="Ingrese su contraseña" fluid type="password" name="password" />
+                                    <Input icon="eye slash outline" className="ml-2" onChange={(e) => handleInputLogin(e.target)} value={Login.password || ""} iconPosition="left" placeholder="Ingrese su contraseña" fluid type="password" name="password" />
                                     {errors && errors.password ?
                                         <label className="ml-2" style={{ color: "#c91d12" }}>{errors.password}</label>
                                         : null

@@ -1,19 +1,96 @@
 import React, { Fragment, useState, useEffect, useContext } from 'react';
-import Router from 'next/router';
-import Show from './Show';
+
+
 import Link from 'next/link'
-import { Button } from 'semantic-ui-react'
+const axios = require('axios');
+import { url } from '../env.json';
+import Router from 'next/router';
+import { Button, Dropdown, Image } from 'semantic-ui-react'
 import { AppContext } from '../contexts/AppContext'
 
-const NavBar = ({ isLogging, auth }) => {
+const NavBar = ({ isLogging, auth, setauth, deleteToken, setIsLogging }) => {
+
+    // const [session, loading] = useSession()
     // localStorage.setItem('UserActual','aeamano')
 
     // const { isLogging } = useContext(AppContext);
     // const [UserActual, setUserActual] = useState("");
+    const [selectedindex, setselectedindex] = useState(null);
+    const trigger = (
+        <span>
+            <Image avatar src="/img/profile.jpg" /> {auth.first_name || ""}
+        </span>
+    )
 
 
+    const options = [
+        { key: 'settings', text: 'Configuración', icon: 'settings', value: 'settings' },
+        { key: 'edit-pro', text: 'Mostrar productos', icon: 'edit', value: 'edit-pro' },
+        { key: 'sign-out', text: 'Cerrar Sesion', icon: 'sign out', value: 'sign-out' },
+    ]
+
+    const optionsadmin = [
+        { key: 'settings', text: 'Configuración', icon: 'settings', value: 'settings' },
+        { key: 'edit-pro', text: 'Editar Productos', icon: 'edit', value: 'edit-pro' },
+        { key: 'add-pro', text: 'Agregar Productos', icon: 'add', value: 'add-pro' },
+        { key: 'report', text: 'Reportes', icon: 'wordpress forms', value: 'report' },
+        { key: 'sign-out', text: 'Cerrar Sesion', icon: 'sign out', value: 'sign-out' }
+
+    ]
+
+    const handleoption = ({ value }) => {
+        let { push } = Router;
+        switch (value) {
+            case 'settings': console.log('Estas modificando tu cuenta')
+                break;
+            case 'edit-pro': {
+                push({ pathname: '/show'})
+            }
+                break;
+            case 'add-pro': {
+                push({ pathname: '/agregar' })
+            }
+                break;
+            case 'sign-out': logout(), deleteToken()
+                break;
+        }
+
+    }
+
+
+    const logout = async () => {
+
+        let { push } = Router
+        try {
+            let { API_LOGIN } = url;
+            await axios.get(API_LOGIN + "logout")
+                .then(async response => {
+                    let data = response.data
+                    console.log(data)
+                    setauth({})
+                    push({ pathname: '/' })
+                }).catch(async error => {
+                    try {
+                        let response = error
+                        console.log(response)
+                    } catch (error) {
+                        console.log(error)
+                    }
+                })
+
+            setIsLogging(false)
+        } catch (error) {
+            console.log(error)
+        }
+
+
+    }
     return (
         <Fragment>
+
+
+
+
             <div className="az-header">
                 <div className="container">
                     <div className="az-header-left">
@@ -22,7 +99,7 @@ const NavBar = ({ isLogging, auth }) => {
                                 e.preventDefault()
                                 Router.push('/')
                             }
-                        } className="az-logo"><span></span> <img src="img/logocv.png" /></a>
+                        } className="az-logo"><span></span><img src="/img/logocv.png" /></a>
                         <a href="" id="azMenuShow" className="az-header-menu-icon d-lg-none"><span></span></a>
                     </div>
                     <div className="az-header-menu">
@@ -30,7 +107,7 @@ const NavBar = ({ isLogging, auth }) => {
                             <a onClick={() => {
                                 e.preventDefault()
                                 Router.push('/')
-                            }} className="az-logo"><span></span> <img src="img/logocv.png" /></a>
+                            }} className="az-logo"><span></span> <img src="/img/logocv.png" /></a>
                             <a href="" className="close">&times;</a>
                         </div>
                         <ul className="nav">
@@ -119,6 +196,16 @@ const NavBar = ({ isLogging, auth }) => {
                         {!isLogging ?
 
                             <ul className="nav">
+                                <ul className="nav">
+                                    <li className="nav-link">
+                                        <a onClick={
+                                            (e) => {
+                                                e.preventDefault()
+                                                Router.push('/carrito')
+                                            }
+                                        }><i className="fas fa-shopping-cart mr-2"></i>Carrito</a>
+                                    </li>
+                                </ul>
                                 <li className="nav-link">
                                     <a onClick={
                                         (e) => {
@@ -134,32 +221,31 @@ const NavBar = ({ isLogging, auth }) => {
                                     }}><i className="fas fa-tv mr-2 ml-2"></i>Incicie Sesión</a>
                                 </li>
                             </ul>
+                            : <Fragment>
+                                {auth.isadmin != 1 ?
+                                    <ul className="nav">
+                                        <li className="nav-link">
+                                            <a onClick={
+                                                (e) => {
+                                                    e.preventDefault()
+                                                    Router.push('/carrito')
+                                                }
+                                            }><i className="fas fa-shopping-cart mr-2"></i>Carrito</a>
+                                        </li>
+                                    </ul>
+                                    :
+                                    null}
+                                <Dropdown
+                                    trigger={trigger}
+                                    options={auth.isadmin == 1 ? optionsadmin : options}
+                                    name="option"
+                                    pointing='top right'
+                                    // value={dropdown || ""}
+                                    icon={null}
 
-
-
-
-
-                            : <div className="dropdown az-profile-menu">
-                                <a href="" className="az-img-user"><img src="../img/profile.jpg" alt="" /></a>
-                                <div className="dropdown-menu">
-                                    <div className="az-dropdown-header d-sm-none">
-                                        <a href="" className="az-header-arrow"><i className="icon ion-md-arrow-back"></i></a>
-                                    </div>
-                                    <div className="az-header-profile">
-                                        <div className="az-img-user" >
-                                            <img src="/img/profile.jpg" alt="" />
-                                        </div>
-                                        <h6>Aziana Pechon</h6>
-                                        <span>Premium Member</span>
-                                    </div>
-
-                                    <a href="" className="dropdown-item"><i className="typcn typcn-user-outline"></i> My Profile</a>
-                                    <a href="" className="dropdown-item"><i className="typcn typcn-edit"></i> Edit Profile</a>
-                                    <a href="" className="dropdown-item"><i className="typcn typcn-time"></i> Activity Logs</a>
-                                    <a href="" className="dropdown-item"><i className="typcn typcn-cog-outline"></i> Account Settings</a>
-                                    <a href="page-signin.html" className="dropdown-item"><i className="typcn typcn-power-outline"></i> Sign Out</a>
-                                </div>
-                            </div>
+                                    onChange={(e, obj) => handleoption(obj)}
+                                />
+                            </Fragment>
                         }
                     </div>
                 </div>

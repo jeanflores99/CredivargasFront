@@ -1,14 +1,17 @@
-import React, { Fragment, Component} from 'react';
+import React, { Fragment, Component } from 'react';
+// import AllProductos from '../components/allproducto'
+import SHOW from './show';
 
-
-
-function HomePage() {
+function HomePage({ auth }) {
 
   return (
     <div>
-     <h2>hola</h2>
 
-
+      {/* <AllProductos /> */}
+      {/* <ShowProductoUnique
+        auth={auth}
+      /> */}
+      <SHOW auth={auth}  />
     </div>
   )
 }

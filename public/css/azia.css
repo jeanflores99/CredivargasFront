@@ -9197,7 +9197,7 @@ body {
         padding: 0;
         flex-direction: row;
         align-items: center; } }
-  .az-header-menu .nav-item::before {
+  /* .az-header-menu .nav-item::before {
     content: '';
     position: absolute;
     top: 67px;
@@ -9209,7 +9209,7 @@ body {
     background-color: #fff;
     transform: rotate(45deg);
     z-index: 100;
-    display: none; }
+    display: none; } */
   .az-header-menu .nav-item + .nav-item {
     margin-top: 10px; }
     @media (min-width: 992px) {
