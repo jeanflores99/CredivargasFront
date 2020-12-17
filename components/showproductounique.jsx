@@ -4,9 +4,9 @@ import { Button, Card, Dimmer, Loader, Icon } from 'semantic-ui-react'
 // import AwesomeSlider from 'react-awesome-slider';
 // import 'react-awesome-slider/dist/styles.css';
 
-const showproductounique = ({ obj, auth,agregaralcarrito }) => {
+const showproductounique = ({ obj, auth, agregaralcarrito }) => {
     const [state, setstate] = useState(1);
-   
+
     useEffect(() => {
 
     }, [state]);
@@ -44,11 +44,11 @@ const showproductounique = ({ obj, auth,agregaralcarrito }) => {
                         )}
 
                     </div>
-                    <a className="carousel-control-prev" href="#carousel-example-1z" role="button" data-slide="prev">
+                    <a className="carousel-control-prev" role="button" data-slide="prev">
                         <span aria-hidden="true" onClick={(e) => previous()}><Icon name="arrow alternate circle left" color="blue" size="big" /></span>
                         <span className="sr-only" >Previous</span>
                     </a>
-                    <a className="carousel-control-next" href="#carousel-example-1z" role="button" data-slide="next">
+                    <a className="carousel-control-next" role="button" data-slide="next">
                         <span aria-hidden="true" onClick={(e) => next(obj.image_url.length)}><Icon name="arrow alternate circle right" color="blue" size="big" /></span>
                         <span className="sr-only">Next</span>
                     </a>
@@ -57,8 +57,8 @@ const showproductounique = ({ obj, auth,agregaralcarrito }) => {
 
             <Card.Content>
 
-                <Card.Meta style={{ textDecoration: 'line-through' }}>S/{obj.precioanterior == 0 ? obj.precio + 200 : null}</Card.Meta>
-                <Card.Header >S/{obj.precio}</Card.Header>
+                <Card.Meta style={{ textDecoration: 'line-through' }}>S/{obj.precioanterior == 0 ? parseFloat(obj.precio + 200, 10).toFixed(2) : null}</Card.Meta>
+                <Card.Header >S/{parseFloat(obj.precio, 10).toFixed(2)}</Card.Header>
                 <Card.Description>
                     {obj.name}
                     {/* <strong>best friends</strong> */}

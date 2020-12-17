@@ -26,6 +26,7 @@ const NavBar = ({ isLogging, auth, setauth, deleteToken, setIsLogging }) => {
     const options = [
         { key: 'settings', text: 'Configuración', icon: 'settings', value: 'settings' },
         { key: 'edit-pro', text: 'Mostrar productos', icon: 'edit', value: 'edit-pro' },
+        { key: 'mis-compras', text: 'Mis Compras', icon: 'tag', value: 'mis-compras' },
         { key: 'sign-out', text: 'Cerrar Sesion', icon: 'sign out', value: 'sign-out' },
     ]
 
@@ -44,11 +45,15 @@ const NavBar = ({ isLogging, auth, setauth, deleteToken, setIsLogging }) => {
             case 'settings': console.log('Estas modificando tu cuenta')
                 break;
             case 'edit-pro': {
-                push({ pathname: '/show'})
+                push({ pathname: '/show' })
             }
                 break;
             case 'add-pro': {
                 push({ pathname: '/agregar' })
+            } 
+            break;
+            case 'mis-compras': {
+                push({ pathname: '/miscompras' })
             }
                 break;
             case 'sign-out': logout(), deleteToken()

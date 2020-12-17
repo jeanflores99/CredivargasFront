@@ -4,15 +4,6 @@ import { url } from '../env'
 import Head from 'next/head';
 import Swal from 'sweetalert2';
 import SemanticDatepicker from 'react-semantic-ui-datepickers';
-// import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
-// import { Card, Icon, Image, Form, Button } from 'semantic-ui-react'
-// import 'images/icons/favicon.ico';
-// import 'font/css/font-awesome.min.css';
-// import 'animate/animate.css';
-// import 'css-hamburgers/hamburgers.min.css'
-// import 'select2/select2.min.css';
-// import 'css/util.css';
-// import 'main.css';
 
 const axios = require('axios');
 

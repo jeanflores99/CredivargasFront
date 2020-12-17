@@ -5,7 +5,6 @@ import ShowProductoUnique from '../components/showproductounique';
 const axios = require('axios');
 
 import { url } from '../env'
-import { compareSync } from 'bcryptjs';
 
 
 const show = ({ auth }) => {
@@ -79,7 +78,7 @@ const show = ({ auth }) => {
             })
     }
     const agregaralcarrito = async ({ id, precio, name }) => {
-    
+
         const auth_id = auth.id
         if (auth_id == null) {
             // console.log('entrando')
@@ -93,10 +92,45 @@ const show = ({ auth }) => {
             await setcarrito([await tmp, ...carrito])
             localStorage.setItem('carrito', JSON.stringify(carrito))
             await setagregando(true)
-         
+
             await Swal.fire({ icon: 'success', text: `${name} agregado al carrito` })
         }
+        else {
+            let { API_LOGIN } = url;
+            let carrito = {
+                total: 0,
+                user_id: auth.id
+            }
+            await axios.post(API_LOGIN + 'carrito/crear', carrito)
+                .then(async res => {
+                    const idcarrito = res.data.dat.id
 
+
+                    let datoscarrito = {
+                        idcarrito: idcarrito,
+                        subtotal: precio
+                    }
+
+
+                    await axios.post(API_LOGIN + 'carrito/agregaralcarrito/' + id, datoscarrito)
+                        .then(async res => {
+                            await Swal.fire({ icon: 'success', text: `${name} agregado al carrito` })
+                        })
+                        .catch(async err => {
+                            console.log(err)
+                        })
+
+
+
+                }).catch(async err => {
+                    console.log(err)
+                })
+
+
+
+
+
+        }
         // localStorage.setItem('iduser', auth_id || null)
         // console.log(auth_id || null)
     }

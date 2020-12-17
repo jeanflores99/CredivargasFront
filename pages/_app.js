@@ -48,10 +48,20 @@ export default function MyApp({ Component, pageProps, pathname }) {
         return;
       }
       try {
-        const { data } = await Axios.get('http://127.0.0.1:3333/getUser');
-        setauth(data)
+
+        await Axios.get('http://127.0.0.1:3333/getUser')
+          .then(async res => {
+            //  await
+            await setauth(res.data)
+            await setIsLogging(true)
+            // setauth(data)
+          })
+          .catch(async err => {
+
+          })
+        // (data)
         // console.log(data)
-        setIsLogging(true)
+
 
 
 
@@ -66,7 +76,7 @@ export default function MyApp({ Component, pageProps, pathname }) {
       }
     }
     cargarUsuario()
-  
+
   }, []);
 
 
@@ -513,7 +523,7 @@ export default function MyApp({ Component, pageProps, pathname }) {
       {/* <Show condicion={true}>
         <LoadingGlobal display="block" />
       </Show> */}
-     
+
       <Component {...pageProps} isLogging={isLogging} setIsLogging={setIsLogging} auth={auth} setauth={setauth} setloading={setloading} />
 
 
