@@ -50,8 +50,8 @@ const NavBar = ({ isLogging, auth, setauth, deleteToken, setIsLogging }) => {
                 break;
             case 'add-pro': {
                 push({ pathname: '/agregar' })
-            } 
-            break;
+            }
+                break;
             case 'mis-compras': {
                 push({ pathname: '/miscompras' })
             }
@@ -243,12 +243,12 @@ const NavBar = ({ isLogging, auth, setauth, deleteToken, setIsLogging }) => {
                                 <Dropdown
                                     trigger={trigger}
                                     options={auth.isadmin == 1 ? optionsadmin : options}
-                                    name="option"
+                                    icon={null}
                                     pointing='top right'
                                     // value={dropdown || ""}
-                                    icon={null}
 
-                                    onChange={(e, obj) => handleoption(obj)}
+                                    // onSearchChange={console.log('aea')}
+                                onChange={(e, obj) => handleoption(obj)}
                                 />
                             </Fragment>
                         }
