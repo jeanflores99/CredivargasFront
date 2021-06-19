@@ -73,6 +73,7 @@ const carrito = ({ isLogging, auth }) => {
                 let { id } = res.data.dat
 
                 await llenarCarrito(id, carr)
+                await traerDatosBD(auth.id)
             }).catch(async err => {
                 console.log(err)
             })
@@ -216,15 +217,15 @@ const carrito = ({ isLogging, auth }) => {
     // const pagarelcarrito = async () => {
     //     // let { API_LOGIN } = url;
     //     let { push } = Router;
-        // await axios.get(API_LOGIN + 'carrito/obtenerdatosdelcarrito/' + auth.id)
-        //     .then(async (res) => {
-        //         let { datos } = res.data
-        //         console.log(datos)
-        // push({ pathname: '/pagar' })
-        //     })
-        //             .catch (async (err) => {
-        //     console.log(err)
-        // })
+    // await axios.get(API_LOGIN + 'carrito/obtenerdatosdelcarrito/' + auth.id)
+    //     .then(async (res) => {
+    //         let { datos } = res.data
+    //         console.log(datos)
+    // push({ pathname: '/pagar' })
+    //     })
+    //             .catch (async (err) => {
+    //     console.log(err)
+    // })
     // }
 
     return (
